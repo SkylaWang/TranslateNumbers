@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TranslateNumbers
 {
@@ -18,23 +19,29 @@ namespace TranslateNumbers
         const int MILLION = 1000000;
         const int BILLION = 1000000000;
 
-        public static string DoTransalte(string source)
+        const double MIN = 0.01;
+        const double MAX = 999999999999.99;
+
+        const string ERROR_PATTERN = "Invalid number. It must be a positive number, up to 2 decimals.";
+        static string ERROR_RANGE = $"Invalid number. It must be between {MIN} and {MAX}";
+
+        public static string TransalteCurrencyAmountToWords(string source)
         {
             ValidationResult validation = IsValid(source);
             if (validation.IsValid)
             {
                 string[] wholeNumberAndDecimal = source.Trim().Split('.');
                 
-                int wholeNum = Int32.Parse(wholeNumberAndDecimal[0]);
+                long wholeNum = Int64.Parse(wholeNumberAndDecimal[0]);
                 string words = string.Empty;
                 if (wholeNum > 0)
                 {
-                    words = TranslatePositiveInt(wholeNum) + (wholeNum > 1 ? " dollars" : " dollar");
+                    words = TranslatePositiveInt(wholeNum) + (wholeNum > 1 ? " Dollars" : " Dollar");
                 }
                 
                 if (wholeNumberAndDecimal.Length > 1)
                 {
-                    int decimalNum = Int32.Parse(wholeNumberAndDecimal[1]);
+                    long decimalNum = Int64.Parse(wholeNumberAndDecimal[1]);
                     if (decimalNum > 0)
                     {
                         decimalNum = wholeNumberAndDecimal[1].Length == 1 ? decimalNum * 10 : decimalNum;
@@ -54,55 +61,85 @@ namespace TranslateNumbers
 
         private static ValidationResult IsValid(string source)
         {
+            string patternReg = @"(^\d+(\.\d{1,2})?$)";
+            Regex patternCheck = new Regex(patternReg);
+
+            if (!patternCheck.IsMatch(source))
+            {
+                return new ValidationResult
+                {
+                    IsValid = false,
+                    ErrorMsg = ERROR_PATTERN
+                };
+            }
+
+            double sourceToNumber = Double.Parse(source);
+            if(sourceToNumber < MIN || sourceToNumber > MAX)
+            {
+                return new ValidationResult
+                {
+                    IsValid = false,
+                    ErrorMsg = ERROR_RANGE
+                };
+            }
+                
             return new ValidationResult
             {
                 IsValid = true
             };
         }
-        private static string TranslatePositiveInt(int number, List<string> currentWords = null)
+        private static string TranslatePositiveInt(long number)
         {
-            string word = string.Empty;
-            List<string> words = currentWords?? new List<string>();
+            StringBuilder word = new StringBuilder();
 
-            int below, times;
+            long below, times;
 
             if (number > BILLION)
             {
                 below = number % BILLION;
                 times = number / BILLION;
-                word = TranslatePositiveInt(times) + " billion " + TranslatePositiveInt(below);
+                word.Append(TranslatePositiveInt(times));
+                word.Append(" billion ");
+                word.Append(TranslatePositiveInt(below));
             }
             else if (number > MILLION)
             {
                 below = number % MILLION;
                 times = number / MILLION;
-                word = TranslatePositiveInt(times) + " million " + TranslatePositiveInt(below);
+                word.Append(TranslatePositiveInt(times));
+                word.Append(" million ");
+                word.Append(TranslatePositiveInt(below));
             }
             else if (number > THOUSAND)
             {
                 below = number % THOUSAND;
                 times = number / THOUSAND;
-                word = TranslatePositiveInt(times) + " thousand " + TranslatePositiveInt(below);
+                word.Append(TranslatePositiveInt(times));
+                word.Append(" thousand ");
+                word.Append(TranslatePositiveInt(below));
             }
             else if (number > HUNDRED)
             {
                 below = number % HUNDRED;
                 times = number / HUNDRED;
-                word = BELOW_TWENTY[times - 1] + " hundred " + TranslatePositiveInt(below);
+                word.Append(BELOW_TWENTY[times - 1]);
+                word.Append(" hundred ");
+                word.Append(TranslatePositiveInt(below));
 
             }
             else if(number >= TWENTY)
             {
                 below = number % TEN;
                 times = number / TEN;
-                word = MORE_THAN_TWENTY[times - 2] + (below > 0 ? "-" + TranslatePositiveInt(below) : string.Empty);
+                word.Append(MORE_THAN_TWENTY[times - 2]);
+                word.Append((below > 0 ? "-" + TranslatePositiveInt(below) : string.Empty));
             }
             else if(number >= 1)
             {
-                word = BELOW_TWENTY[number - 1];
+                word.Append(BELOW_TWENTY[number - 1]);
             }
             
-            return word;
+            return word.ToString();
         }
     }
 }

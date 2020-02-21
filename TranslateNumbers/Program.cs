@@ -18,7 +18,7 @@ namespace TranslateNumbers
                 }
                 else
                 {
-                    string result = Translation.DoTransalte(entry);
+                    string result = Translation.TransalteCurrencyAmountToWords(entry.Trim());
                     Console.WriteLine("OutPut: " + result);
                 }
             }

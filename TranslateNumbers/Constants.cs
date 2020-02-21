@@ -21,8 +21,12 @@ namespace TranslateNumbers
         public const double MIN = 0.01;
         public const double MAX = 999999999999.99;
 
-        public const string ERROR_PATTERN = "Invalid number. It must be a positive number, up to 2 decimals.";
-        public static string ERROR_RANGE = $"Invalid number. It must be between {MIN} and {MAX}";
-        public const string OTHER_ERROR = "OutPut: Some unexpected error happens. Please try again.";
+        public const string ERROR_PATTERN = "Error: Invalid number. It must be a positive number, up to 2 decimals.";
+        public static string ERROR_RANGE = $"Error: Invalid number. It must be between {MIN} and {MAX}";
+        public const string OTHER_ERROR = "Error: Some unexpected error happens. Please try again.";
+
+        public const string EXIT = "EXIT";
+        public const string INPUT = "InPut: ";
+        public const string OUTPUT = "OutPut: ";
     }
 }

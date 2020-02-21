@@ -5,7 +5,7 @@ namespace TranslateNumbers
 {
     class Program
     {
-        const string EXIT = "EXIT";
+        
         static void Main(string[] args)
         {
             bool isContinue = true;
@@ -13,10 +13,10 @@ namespace TranslateNumbers
             {
                 try
                 {
-                    Console.Write("InPut: ");
+                    Console.Write(Constants.INPUT);
                     string entry = Console.ReadLine();
                     //When enter "exit", it will end the loop
-                    if (entry.ToUpper().Equals(EXIT))
+                    if (entry.ToUpper().Equals(Constants.EXIT))
                     {
                         isContinue = false;
                     }
@@ -24,7 +24,7 @@ namespace TranslateNumbers
                     {
                         //translate input number to words, including input validation and translation functions.
                         string result = Translation.TransalteCurrencyAmountToWords(entry.Trim());
-                        Console.WriteLine("OutPut: " + result);
+                        Console.WriteLine(Constants.OUTPUT + result);
                     }
                 }
                 //error handling, can add future to log all exceptions

@@ -1,4 +1,5 @@
 ﻿using System;
+using TranslateNumbers.Exceptions;
 
 namespace TranslateNumbers
 {
@@ -27,8 +28,16 @@ namespace TranslateNumbers
                     }
                 }
                 //error handling, can add future to log all exceptions
-                catch (Exception ex){
-                    Console.WriteLine("OutPut: Some unexpected error happens. Please try again.");
+                catch (InvalidPatternException ex){
+                    Console.WriteLine(ex.Message);
+                }
+                catch (InvalidRangeException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch
+                {
+                    Console.WriteLine(Constants.OTHER_ERROR);
                 }
             }
             while (isContinue);

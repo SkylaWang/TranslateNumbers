@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using TranslateNumbers.Exceptions;
 
 namespace TranslateNumbers
 {
@@ -12,51 +13,43 @@ namespace TranslateNumbers
         public static string TransalteCurrencyAmountToWords(string source)
         {
             //step 1: validation input
-            ValidationResult validation = IsValid(source);
-            
-            //step 2.1: for valid input, start translate
-            if (validation.IsValid)
-            {
-                //step 3: seprate a number as whole number part and decimal part, and translate each part respectively
-                string[] wholeNumberAndDecimal = source.Trim().Split('.');
-                
-                long wholeNum = Int64.Parse(wholeNumberAndDecimal[0]);
-                StringBuilder words = new StringBuilder();
+            IsValid(source);
 
-                //step 4.1: translate whole numer part 
-                if (wholeNum > 0)
+            //step 2: for valid input, start translate
+            //step 2.1: seprate a number as whole number part and decimal part, and translate each part respectively
+            string[] wholeNumberAndDecimal = source.Trim().Split('.');
+
+            long wholeNum = Int64.Parse(wholeNumberAndDecimal[0]);
+            StringBuilder words = new StringBuilder();
+
+            //step 2.2: translate whole numer part 
+            if (wholeNum > 0)
+            {
+                words.Append(TranslatePositiveInt(wholeNum));
+                //check if need plural noun 
+                words.Append((wholeNum > 1 ? " Dollars" : " Dollar"));
+            }
+
+            //step 2.3: translate decimal part if have any
+            if (wholeNumberAndDecimal.Length > 1)
+            {
+                long decimalNum = Int64.Parse(wholeNumberAndDecimal[1]);
+                if (decimalNum > 0)
                 {
-                    words.Append(TranslatePositiveInt(wholeNum));
+                    //if there is one decimal place, should regard the value as 10 times, e.g. 0.1 = 0.10
+                    decimalNum = wholeNumberAndDecimal[1].Length == 1 ? decimalNum * 10 : decimalNum;
+                    words.Append(words.ToString().Equals(string.Empty) ? string.Empty : " and ");
                     //check if need plural noun 
-                    words.Append((wholeNum > 1 ? " Dollars" : " Dollar"));
+                    words.Append(TranslatePositiveInt(decimalNum) + (decimalNum > 1 ? " Cents" : " Cent"));
                 }
-                
-                //step 4.2: translate decimal part if have any
-                if (wholeNumberAndDecimal.Length > 1)
-                {
-                    long decimalNum = Int64.Parse(wholeNumberAndDecimal[1]);
-                    if (decimalNum > 0)
-                    {
-                        //if there is one decimal place, should regard the value as 10 times, e.g. 0.1 = 0.10
-                        decimalNum = wholeNumberAndDecimal[1].Length == 1 ? decimalNum * 10 : decimalNum;
-                        words.Append(words.ToString().Equals(string.Empty) ? string.Empty : " and ");
-                        //check if need plural noun 
-                        words.Append(TranslatePositiveInt(decimalNum) + (decimalNum > 1 ? " Cents" : " Cent"));
-                    }
-                }
-
-                return words.ToString();
-            }
-            //step 2.2: for invalid input, reply error message
-            else
-            {
-                return validation.ErrorMsg;
             }
 
+            //step 2.4: return result
+            return words.ToString();
         }
 
         //Validation method
-        private static ValidationResult IsValid(string source)
+        private static void IsValid(string source)
         {
             //pattern validation. 
             //Assum that the valid input should be a positive number with maximun 2 decimal places.
@@ -65,11 +58,7 @@ namespace TranslateNumbers
 
             if (!patternCheck.IsMatch(source))
             {
-                return new ValidationResult
-                {
-                    IsValid = false,
-                    ErrorMsg = Constants.ERROR_PATTERN
-                };
+                throw new InvalidPatternException();
             }
 
             //range validation.
@@ -77,18 +66,9 @@ namespace TranslateNumbers
             double sourceToNumber = Double.Parse(source);
             if(sourceToNumber < Constants.MIN || sourceToNumber > Constants.MAX)
             {
-                return new ValidationResult
-                {
-                    IsValid = false,
-                    ErrorMsg = Constants.ERROR_RANGE
-                };
+                throw new InvalidRangeException();
             }
              
-            //when pass all validation, return true as IsValid
-            return new ValidationResult
-            {
-                IsValid = true
-            };
         }
 
         //Core translate function

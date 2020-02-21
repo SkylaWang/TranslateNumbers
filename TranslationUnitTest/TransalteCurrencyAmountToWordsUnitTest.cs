@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using TranslateNumbers;
+using TranslateNumbers.Exceptions;
 
 namespace TranslationUnitTest
 {
@@ -14,18 +15,14 @@ namespace TranslationUnitTest
         [Test]
         public void TestInvalidPatternEntry()
         {
-            string expectResult = Constants.ERROR_PATTERN;
-            string actualResult = Translation.TransalteCurrencyAmountToWords("a4bc-890");
-            Assert.True(expectResult.Equals(actualResult));
+            Assert.Throws<InvalidPatternException>(()=> Translation.TransalteCurrencyAmountToWords("a4bc-890"));
         }
 
         //scenario 2: test invalid input, especially smaller than min value
         [Test]
         public void TestOutOfMinEntry()
         {
-            string expectResult = Constants.ERROR_RANGE;
-            string actualResult = Translation.TransalteCurrencyAmountToWords("0");
-            Assert.True(expectResult.Equals(actualResult));
+            Assert.Throws<InvalidRangeException>(() => Translation.TransalteCurrencyAmountToWords("0"));
         }
 
         //scenario 3: test boundar input, especially min value
@@ -41,9 +38,7 @@ namespace TranslationUnitTest
         [Test]
         public void TestOutofMaxEntry()
         {
-            string expectResult = Constants.ERROR_RANGE;
-            string actualResult = Translation.TransalteCurrencyAmountToWords("1000000000000");
-            Assert.True(expectResult.Equals(actualResult));
+            Assert.Throws<InvalidRangeException>(() => Translation.TransalteCurrencyAmountToWords("1000000000000"));
         }
 
         //scenario 5: test boundar input, especially max value

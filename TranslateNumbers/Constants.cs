@@ -23,5 +23,6 @@ namespace TranslateNumbers
 
         public const string ERROR_PATTERN = "Invalid number. It must be a positive number, up to 2 decimals.";
         public static string ERROR_RANGE = $"Invalid number. It must be between {MIN} and {MAX}";
+        public const string OTHER_ERROR = "OutPut: Some unexpected error happens. Please try again.";
     }
 }

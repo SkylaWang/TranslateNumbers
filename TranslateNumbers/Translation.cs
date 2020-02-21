@@ -8,25 +8,6 @@ namespace TranslateNumbers
     //A static class contain the translation functions.
     public static class Translation
     {
-        //private constance fields
-        static readonly string[] BELOW_TWENTY = { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", 
-                                                  "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", 
-                                                  "eighteen", "nineteen" };
-        static readonly string[] MORE_THAN_TWENTY = { "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
-
-        const int TEN = 10;
-        const int TWENTY = 20;
-        const int HUNDRED = 100;
-        const int THOUSAND = 1000;
-        const int MILLION = 1000000;
-        const int BILLION = 1000000000;
-
-        const double MIN = 0.01;
-        const double MAX = 999999999999.99;
-
-        const string ERROR_PATTERN = "Invalid number. It must be a positive number, up to 2 decimals.";
-        static string ERROR_RANGE = $"Invalid number. It must be between {MIN} and {MAX}";
-
         //The entry of the translation function
         public static string TransalteCurrencyAmountToWords(string source)
         {
@@ -87,19 +68,19 @@ namespace TranslateNumbers
                 return new ValidationResult
                 {
                     IsValid = false,
-                    ErrorMsg = ERROR_PATTERN
+                    ErrorMsg = Constants.ERROR_PATTERN
                 };
             }
 
             //range validation.
             //Assum that the valid input should between 0.01 and 999999999999.99
             double sourceToNumber = Double.Parse(source);
-            if(sourceToNumber < MIN || sourceToNumber > MAX)
+            if(sourceToNumber < Constants.MIN || sourceToNumber > Constants.MAX)
             {
                 return new ValidationResult
                 {
                     IsValid = false,
-                    ErrorMsg = ERROR_RANGE
+                    ErrorMsg = Constants.ERROR_RANGE
                 };
             }
              
@@ -120,10 +101,10 @@ namespace TranslateNumbers
 
             long remainder, times;
             
-            if (number >= BILLION)
+            if (number >= Constants.BILLION)
             {
-                remainder = number % BILLION;
-                times = number / BILLION;
+                remainder = number % Constants.BILLION;
+                times = number / Constants.BILLION;
 
                 //translate numbers before 'billion' in the result
                 word.Append(TranslatePositiveInt(times));
@@ -131,10 +112,10 @@ namespace TranslateNumbers
                 //translate numbers after 'billion' in the result
                 word.Append(TranslatePositiveInt(remainder));
             }
-            else if (number >= MILLION)
+            else if (number >= Constants.MILLION)
             {
-                remainder = number % MILLION;
-                times = number / MILLION;
+                remainder = number % Constants.MILLION;
+                times = number / Constants.MILLION;
 
                 //translate numbers before 'million' in the result
                 word.Append(TranslatePositiveInt(times));
@@ -142,10 +123,10 @@ namespace TranslateNumbers
                 //translate numbers before 'million' in the result
                 word.Append(TranslatePositiveInt(remainder));
             }
-            else if (number >= THOUSAND)
+            else if (number >= Constants.THOUSAND)
             {
-                remainder = number % THOUSAND;
-                times = number / THOUSAND;
+                remainder = number % Constants.THOUSAND;
+                times = number / Constants.THOUSAND;
 
                 //translate numbers before 'thousand' in the result
                 word.Append(TranslatePositiveInt(times));
@@ -153,32 +134,32 @@ namespace TranslateNumbers
                 //translate numbers before 'thousand' in the result
                 word.Append(TranslatePositiveInt(remainder));
             }
-            else if (number >= HUNDRED)
+            else if (number >= Constants.HUNDRED)
             {
-                remainder = number % HUNDRED;
-                times = number / HUNDRED;
+                remainder = number % Constants.HUNDRED;
+                times = number / Constants.HUNDRED;
 
                 //translate numbers before 'hundred' in the result
-                word.Append(BELOW_TWENTY[times - 1]);
+                word.Append(Constants.BELOW_TWENTY[times - 1]);
                 word.Append(" hundred ");
                 //translate numbers before 'hundred' in the result
                 word.Append(TranslatePositiveInt(remainder));
 
             }
             //for number that is equal or more than 20
-            else if (number >= TWENTY)
+            else if (number >= Constants.TWENTY)
             {
-                remainder = number % TEN;
-                times = number / TEN;
+                remainder = number % Constants.TEN;
+                times = number / Constants.TEN;
                 //translate numbers times of 10
-                word.Append(MORE_THAN_TWENTY[times - 2]);
+                word.Append(Constants.MORE_THAN_TWENTY[times - 2]);
                 //translate numbers not times of ten
                 word.Append((remainder > 0 ? "-" + TranslatePositiveInt(remainder) : string.Empty));
             }
             else if(number >= 1)
             {
                 //translate numbers smaller than 20
-                word.Append(BELOW_TWENTY[number - 1]);
+                word.Append(Constants.BELOW_TWENTY[number - 1]);
             }
             
             return word.ToString().Trim();

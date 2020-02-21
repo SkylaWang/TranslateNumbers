@@ -4,13 +4,7 @@ using TranslateNumbers;
 namespace TranslationUnitTest
 {
     public class TransalteCurrencyAmountToWordsUnitTest
-    {       
-        const double MIN = 0.01;
-        const double MAX = 999999999999.99;
-
-        const string ERROR_PATTERN = "Invalid number. It must be a positive number, up to 2 decimals.";
-        string ERROR_RANGE = $"Invalid number. It must be between {MIN} and {MAX}";
-
+    {   
         [SetUp]
         public void Setup()
         {            
@@ -20,7 +14,7 @@ namespace TranslationUnitTest
         [Test]
         public void TestInvalidPatternEntry()
         {
-            string expectResult = ERROR_PATTERN;
+            string expectResult = Constants.ERROR_PATTERN;
             string actualResult = Translation.TransalteCurrencyAmountToWords("a4bc-890");
             Assert.True(expectResult.Equals(actualResult));
         }
@@ -29,7 +23,7 @@ namespace TranslationUnitTest
         [Test]
         public void TestOutOfMinEntry()
         {
-            string expectResult = ERROR_RANGE;
+            string expectResult = Constants.ERROR_RANGE;
             string actualResult = Translation.TransalteCurrencyAmountToWords("0");
             Assert.True(expectResult.Equals(actualResult));
         }
@@ -39,7 +33,7 @@ namespace TranslationUnitTest
         public void TestMinNumberEntry()
         {
             string expectResult = "one Cent";
-            string actualResult = Translation.TransalteCurrencyAmountToWords(MIN.ToString());
+            string actualResult = Translation.TransalteCurrencyAmountToWords(Constants.MIN.ToString());
             Assert.True(expectResult.Equals(actualResult));
         }
 
@@ -47,7 +41,7 @@ namespace TranslationUnitTest
         [Test]
         public void TestOutofMaxEntry()
         {
-            string expectResult = ERROR_RANGE;
+            string expectResult = Constants.ERROR_RANGE;
             string actualResult = Translation.TransalteCurrencyAmountToWords("1000000000000");
             Assert.True(expectResult.Equals(actualResult));
         }
@@ -57,7 +51,7 @@ namespace TranslationUnitTest
         public void TestMaxNumberEntry()
         {
             string expectResult = "nine hundred ninety-nine billion nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-nine Dollars and ninety-nine Cents";
-            string actualResult = Translation.TransalteCurrencyAmountToWords(MAX.ToString());
+            string actualResult = Translation.TransalteCurrencyAmountToWords(Constants.MAX.ToString());
             Assert.True(expectResult.Equals(actualResult));
         }
 

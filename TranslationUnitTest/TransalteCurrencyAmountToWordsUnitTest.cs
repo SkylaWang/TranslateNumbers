@@ -16,6 +16,7 @@ namespace TranslationUnitTest
         {            
         }
 
+        //scenario 1: test invalid input, especially partten invalid
         [Test]
         public void TestInvalidPatternEntry()
         {
@@ -24,6 +25,7 @@ namespace TranslationUnitTest
             Assert.True(expectResult.Equals(actualResult));
         }
 
+        //scenario 2: test invalid input, especially smaller than min value
         [Test]
         public void TestOutOfMinEntry()
         {
@@ -32,6 +34,7 @@ namespace TranslationUnitTest
             Assert.True(expectResult.Equals(actualResult));
         }
 
+        //scenario 3: test boundar input, especially min value
         [Test]
         public void TestMinNumberEntry()
         {
@@ -40,6 +43,7 @@ namespace TranslationUnitTest
             Assert.True(expectResult.Equals(actualResult));
         }
 
+        //scenario 4: test invalid input, especially more than max value
         [Test]
         public void TestOutofMaxEntry()
         {
@@ -48,6 +52,7 @@ namespace TranslationUnitTest
             Assert.True(expectResult.Equals(actualResult));
         }
 
+        //scenario 5: test boundar input, especially max value
         [Test]
         public void TestMaxNumberEntry()
         {
@@ -56,6 +61,7 @@ namespace TranslationUnitTest
             Assert.True(expectResult.Equals(actualResult));
         }
 
+        //scenario 6: test one value from (0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
         [Test]
         public void TestBelowOneWithOneDecimalEntry()
         {
@@ -64,6 +70,7 @@ namespace TranslationUnitTest
             Assert.True(expectResult.Equals(actualResult));
         }
 
+        //scenario 7: test boundar input, number is 1
         [Test]
         public void TestOneDollarEntry()
         {
@@ -72,6 +79,7 @@ namespace TranslationUnitTest
             Assert.True(expectResult.Equals(actualResult));
         }
 
+        //scenario 8: test number between 1 and 20, cover logic if(number > 1 && number < 20)
         [Test]
         public void TestBetweenOneAndTwentyEntry()
         {
@@ -80,6 +88,9 @@ namespace TranslationUnitTest
             Assert.True(expectResult.Equals(actualResult));
         }
 
+        //scenario 9: test number between 20 and 100, cover logic if(number >= 20 && number < 100)
+        //test boundar input, number is 20
+        //especially for number is times of 10
         [Test]
         public void TestTwentyEntry()
         {
@@ -88,6 +99,8 @@ namespace TranslationUnitTest
             Assert.True(expectResult.Equals(actualResult));
         }
 
+        //scenario 10: test number between 20 and 100, cover logic if(number >= 20 && number < 100)
+        //especially for number is not times of 10
         [Test]
         public void TestTwentyOneEntry()
         {
@@ -96,6 +109,7 @@ namespace TranslationUnitTest
             Assert.True(expectResult.Equals(actualResult));
         }
 
+        //scenario 11: test number between 100 and 1000, cover logic if(number >= 100 && number < 1000)
         [Test]
         public void TestBetweenOneHundredAndOneThousandEntry()
         {
@@ -104,6 +118,16 @@ namespace TranslationUnitTest
             Assert.True(expectResult.Equals(actualResult));
         }
 
+        //scenario 12: test boundar input, number is 100
+        [Test]
+        public void TestOneHundredEntry()
+        {
+            string expectResult = "one hundred Dollars";
+            string actualResult = Translation.TransalteCurrencyAmountToWords("100");
+            Assert.True(expectResult.Equals(actualResult));
+        }
+
+        //scenario 13: test number between 1000 and 1 million, cover logic if(number >= 1000 && number < 1000000)
         [Test]
         public void TestBetweenOneThousandAndOneMillionEntry()
         {
@@ -112,7 +136,16 @@ namespace TranslationUnitTest
             Assert.True(expectResult.Equals(actualResult));
         }
 
+        //scenario 14: test boundar input, number is 1000
+        [Test]
+        public void TestOneThousandEntry()
+        {
+            string expectResult = "one thousand Dollars";
+            string actualResult = Translation.TransalteCurrencyAmountToWords("1000");
+            Assert.True(expectResult.Equals(actualResult));
+        }
 
+        //scenario 15: test number between 1 million and 1 billion, cover logic if(number >= 1000000 && number < 1000000000)
         [Test]
         public void TestBetweenOneMillionAndOneBillionEntry()
         {
@@ -121,11 +154,30 @@ namespace TranslationUnitTest
             Assert.True(expectResult.Equals(actualResult));
         }
 
+        //scenario 16: test boundar input, number is 1 million
+        [Test]
+        public void TestOneMillionEntry()
+        {
+            string expectResult = "one million Dollars";
+            string actualResult = Translation.TransalteCurrencyAmountToWords("1000000");
+            Assert.True(expectResult.Equals(actualResult));
+        }
+
+        //scenario 17: test number more than 1 billion, cover logic if(number >= 1000000000)
         [Test]
         public void TestMoreThanOneBillionEntry()
         {
             string expectResult = "one billion two hundred thirty-four million two hundred thirty-four thousand five hundred sixty-seven Dollars and eighty-nine Cents";
             string actualResult = Translation.TransalteCurrencyAmountToWords("1234234567.89");
+            Assert.True(expectResult.Equals(actualResult));
+        }
+
+        //scenario 18: test boundar input, number is 1 billion
+        [Test]
+        public void TestOneBillionEntry()
+        {
+            string expectResult = "one billion Dollars";
+            string actualResult = Translation.TransalteCurrencyAmountToWords("1000000000");
             Assert.True(expectResult.Equals(actualResult));
         }
     }

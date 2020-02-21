@@ -10,16 +10,25 @@ namespace TranslateNumbers
             bool isContinue = true;
             do
             {
-                Console.Write("InPut: ");
-                string entry = Console.ReadLine();
-                if (entry.ToUpper().Equals(EXIT))
+                try
                 {
-                    isContinue = false;
+                    Console.Write("InPut: ");
+                    string entry = Console.ReadLine();
+                    //When enter "exit", it will end the loop
+                    if (entry.ToUpper().Equals(EXIT))
+                    {
+                        isContinue = false;
+                    }
+                    else
+                    {
+                        //translate input number to words, including input validation and translation functions.
+                        string result = Translation.TransalteCurrencyAmountToWords(entry.Trim());
+                        Console.WriteLine("OutPut: " + result);
+                    }
                 }
-                else
-                {
-                    string result = Translation.TransalteCurrencyAmountToWords(entry.Trim());
-                    Console.WriteLine("OutPut: " + result);
+                //error handling, can add future to log all exceptions
+                catch (Exception ex){
+                    Console.WriteLine("OutPut: Some unexpected error happens. Please try again.");
                 }
             }
             while (isContinue);

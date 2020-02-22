@@ -3,6 +3,7 @@
 This is a **command line** project based on **.Net Core 3.1**. The main function is to translate an input number to a currency expression. For example: 
 
 > Input: 5.02 
+
 > Output: five Dollars and two Cents
 
 This documentation will contains following parts:
